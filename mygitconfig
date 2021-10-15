@@ -1,0 +1,113 @@
+[user]
+	name = tandaddos
+	email = tandaddos@gmail.com
+
+[core]
+	autocrlf = input
+	excludefiles = ~/.gitignore_global
+    #editor = vim
+
+[diff]
+	mnemonicprefix = true
+    tool = meld
+#    external = $HOME/bin/gitdiff.sh
+
+[difftool]
+    prompt = false
+
+[difftool "meld"]
+    cmd = meld "$LOCAL" "$REMOTE"
+
+[color]
+	ui = true
+
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = red
+
+[alias]
+	# add and remove all changes
+	addremove = !git r && git add . --all
+
+	# show all aliases
+	aliases = !git config --list | grep 'alias\\.'| sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/'|sort
+
+	# amend
+#	amend = !git log -n 1 --pretty=tformat:%s%n%n%b | git commit -F --amend
+
+	# show all branches
+	brall = branch -av
+
+	# show curr branch
+	bra = !git branch | grep "^*" | awk '{ print $2 }'
+
+	# delete a branch
+	brdel = branch -D
+
+	# most active file
+	churn = !git log --all -M -C --name-only --format='format:' "$@" | sort | grep -v '^$' | uniq -c | sort | awk 'BEGIN { print "count, file" } { print $1 ", " $2}'
+
+	# view log and diff for a commit (previous if no SHA1 provided)
+	details = log -n 1 -p --format=fuller
+
+	# save a repo as a tarball
+	export = archive -o latest.tgz -9 --prefix=latest/
+
+	# unstage - reset head
+	unstage = reset HEAD --
+
+	# view nice git log with branch tree
+	g = !git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+
+	# return a list of commit SHA1's
+	l = "!f() { git log $* | grep '^commit '| cut -f 2 -d '';}; f"
+
+	# remove deleted files
+	r = !git ls-files -z --deleted | xargs -0 git rm
+
+	# return repo's root dir
+	root = rev-parse --show-toplevel
+
+	# update all submodules
+	subupdate = submodule update --init
+
+	# list all tags
+	tags = tag -l
+
+	# start new local repo and do initial commit
+	this = !git init && git add . && git commit -m \"Initial commit.\"
+
+	# thin out older metadata within repo
+	trim = !git reflog expire --expire=now --all && git gc --prune=now
+
+	# checkin
+	ci = commit
+
+	# status
+	sta  = status
+	stat = status
+
+    # checkout
+    co = checkout
+
+    auth = "!f_author () { git log --author=$1; }; f_author"
+    last = log -1 HEAD
+    oneline = log --oneline
+
+[branch]
+    autosetuprebase = always
+
+[url "/home/tnn/myrepos/py.git"]
+	insteadOf = py:
